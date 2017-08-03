@@ -84,8 +84,11 @@ class Model(ModelDesc):
                 #============================= from dorefa ======================================
                 
                 # c = tf.nn.relu(c)
-                
+
                 c = conv('conv1', c, self.growthRate, 1)
+
+                c = fg(c)
+
                 l = tf.concat([c, l], 3)
             return l
 
@@ -98,6 +101,7 @@ class Model(ModelDesc):
                 #============================= from dorefa ======================================
                 l = activate(l)
                 l = Conv2D('conv1', l, in_channel, 1, stride=1, use_bias=False, nl=activate)
+                l = fg(l)
                 #============================= from dorefa ======================================
 
                 # l = tf.nn.relu(l)

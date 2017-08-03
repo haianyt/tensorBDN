@@ -53,6 +53,7 @@ def get_dorefa(bitW, bitA, bitG):
     def fg(x):
         if bitG == 32:
             return x
-        with G.gradient_override_map({"Identity": "FGGrad"}):
-            return tf.identity(x)
+        with tf.variable_scope('FG') as scope:
+            with G.gradient_override_map({"Identity": "FGGrad"}):
+                return tf.identity(x)
     return fw, fa, fg
