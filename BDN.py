@@ -65,7 +65,8 @@ class Model(ModelDesc):
             return tf.clip_by_value(x, 0.0, 1.0)
 
         def activate(x):
-            return fa(nonlin(x))
+            with tf.variable_scope('FA') as scope: 
+                return fa(nonlin(x))
 
         #============================= from dorefa ======================================
 
@@ -78,7 +79,12 @@ class Model(ModelDesc):
             in_channel = shape[3]
             with tf.variable_scope(name) as scope:
                 c = BatchNorm('bn1', l)
-                c = tf.nn.relu(c)
+                #============================= from dorefa ======================================
+                c = activate(c)
+                #============================= from dorefa ======================================
+                
+                # c = tf.nn.relu(c)
+                
                 c = conv('conv1', c, self.growthRate, 1)
                 l = tf.concat([c, l], 3)
             return l
@@ -88,8 +94,15 @@ class Model(ModelDesc):
             in_channel = shape[3]
             with tf.variable_scope(name) as scope:
                 l = BatchNorm('bn1', l)
-                l = tf.nn.relu(l)
-                l = Conv2D('conv1', l, in_channel, 1, stride=1, use_bias=False, nl=tf.nn.relu)
+
+                #============================= from dorefa ======================================
+                l = activate(l)
+                l = Conv2D('conv1', l, in_channel, 1, stride=1, use_bias=False, nl=activate)
+                #============================= from dorefa ======================================
+
+                # l = tf.nn.relu(l)
+                # l = Conv2D('conv1', l, in_channel, 1, stride=1, use_bias=False, nl=tf.nn.relu)
+
                 l = AvgPooling('pool', l, 2)
             return l
 
