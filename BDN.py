@@ -100,8 +100,9 @@ class Model(ModelDesc):
 
                 #============================= from dorefa ======================================
                 l = activate(l)
-                l = Conv2D('conv1', l, in_channel, 1, stride=1, use_bias=False, nl=activate)
+                l = Conv2D('conv1', l, in_channel, 1, stride=1, use_bias=False)
                 l = fg(l)
+                l = activate(l)
                 #============================= from dorefa ======================================
 
                 # l = tf.nn.relu(l)
