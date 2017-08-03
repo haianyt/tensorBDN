@@ -24,9 +24,10 @@ def get_dorefa(bitW, bitA, bitG):
         if bitW == 32:
             return x
         if bitW == 1:   # BWN
-            with G.gradient_override_map({"Sign": "Identity"}):
-                E = tf.stop_gradient(tf.reduce_mean(tf.abs(x)))
-                return tf.sign(x / E) * E
+            with tf.variable_scope('binary') as scope:
+                with G.gradient_override_map({"Sign": "Identity"}):
+                    E = tf.stop_gradient(tf.reduce_mean(tf.abs(x)))
+                    return tf.sign(x / E) * E
         x = tf.tanh(x)
         x = x / tf.reduce_max(tf.abs(x)) * 0.5 + 0.5
         return 2 * quantize(x, bitW) - 1
