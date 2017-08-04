@@ -150,14 +150,14 @@ class Model(ModelDesc):
         add_moving_summary(tf.reduce_mean(wrong, name='train_error'))
 
         # weight decay on all W
-        wd_cost = tf.multiply(1e-4, regularize_cost('.*/W', tf.nn.l2_loss), name='wd_cost')
+        wd_cost = tf.multiply(1e-6, regularize_cost('.*/W', tf.nn.l2_loss), name='wd_cost')
         add_moving_summary(cost, wd_cost)
 
         add_param_summary(('.*/W', ['histogram']))   # monitor W
         self.cost = tf.add_n([cost, wd_cost], name='cost')
 
     def _get_optimizer(self):
-        lr = tf.get_variable('learning_rate', initializer=0.1, trainable=False)
+        lr = tf.get_variable('learning_rate', initializer=0.05, trainable=False)
         tf.summary.scalar('learning_rate', lr)
         return tf.train.MomentumOptimizer(lr, 0.9, use_nesterov=True)
 
@@ -201,7 +201,7 @@ def get_config():
             InferenceRunner(dataset_test,
                 [ScalarStats('cost'), ClassificationError()]),
             ScheduledHyperParamSetter('learning_rate',
-                                      [(1, 0.1), (args.drop_1, 0.01), (args.drop_2, 0.001)])
+                                      [(1, 0.05), (args.drop_1, 0.01), (args.drop_2, 0.001)])
         ],
         model=Model(depth=args.depth),
         steps_per_epoch=steps_per_epoch,
