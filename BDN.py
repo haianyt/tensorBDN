@@ -157,7 +157,7 @@ class Model(ModelDesc):
         self.cost = tf.add_n([cost, wd_cost], name='cost')
 
     def _get_optimizer(self):
-        lr = tf.get_variable('learning_rate', initializer=0.05, trainable=False)
+        lr = tf.get_variable('learning_rate', initializer=0.01, trainable=False)
         tf.summary.scalar('learning_rate', lr)
         return tf.train.MomentumOptimizer(lr, 0.9, use_nesterov=True)
 
@@ -201,7 +201,7 @@ def get_config():
             InferenceRunner(dataset_test,
                 [ScalarStats('cost'), ClassificationError()]),
             ScheduledHyperParamSetter('learning_rate',
-                                      [(1, 0.05), (args.drop_1, 0.01), (args.drop_2, 0.001)])
+                                      [(1, 0.01), (args.drop_1, 0.01), (args.drop_2, 0.001)])
         ],
         model=Model(depth=args.depth),
         steps_per_epoch=steps_per_epoch,
