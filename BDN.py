@@ -23,7 +23,7 @@ On one TITAN X GPU (CUDA 7.5 and cudnn 5.1), the code should run ~5iters/s on a 
 """
 
 BITW = 1
-BITA = 2
+BITA = 32
 BITG = 6
 
 BATCH_SIZE = 64
