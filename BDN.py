@@ -223,4 +223,7 @@ if __name__ == '__main__':
         config.session_init = SaverRestore(args.load)
     if args.gpu:
         config.nr_tower = len(args.gpu.split(','))
+
+    logger.info("Weight bitwidth: {}, Activation bitwidth: {}, Gradient bitwidth: {} ".format(BITW,BITA,BITG))
+
     SyncMultiGPUTrainer(config).train()
