@@ -23,8 +23,8 @@ On one TITAN X GPU (CUDA 7.5 and cudnn 5.1), the code should run ~5iters/s on a 
 """
 
 BITW = 1
-BITA = 32
-BITG = 6
+BITA = 2
+BITG = 32
 
 BATCH_SIZE = 64
 
@@ -183,8 +183,8 @@ def get_data(train_or_test):
     return ds
 
 def get_config():
-    log_dir = 'train_log/cifar10-single-fisrt%s-second%s-max%s' % (str(args.drop_1), str(args.drop_2), str(args.max_epoch))
-    logger.set_logger_dir(log_dir, action='n')
+    # log_dir = 'train_log/cifar10-single-fisrt%s-second%s-max%s' % (str(args.drop_1), str(args.drop_2), str(args.max_epoch))
+    # logger.set_logger_dir(log_dir, action='n')
 
     # prepare dataset
     dataset_train = get_data('train')
@@ -217,7 +217,7 @@ if __name__ == '__main__':
 
     if args.gpu:
         os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
-
+    logger.auto_set_dir()
     config = get_config()
     if args.load:
         config.session_init = SaverRestore(args.load)
