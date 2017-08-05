@@ -176,7 +176,7 @@ def get_data(train_or_test):
     #     augmentors = [
     #         imgaug.MapImage(lambda x: x - pp_mean)
     #     ]
-    ds = AugmentImageComponent(ds, augmentors)
+    # ds = AugmentImageComponent(ds, augmentors)
     ds = BatchData(ds, BATCH_SIZE, remainder=not isTrain)
     if isTrain:
         ds = PrefetchData(ds, 3, 2)
