@@ -1,2 +1,2 @@
 # tensorBDN
-Tensorflow Binarized DenseNet
+Binary DenseNet on tensorflow
