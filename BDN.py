@@ -128,7 +128,7 @@ class Model(ModelDesc):
                 for i in range(self.N):
                     l = add_layer('dense_layer.{}'.format(i), l)
             l = BatchNorm('bnlast', l)
-            l = activate(l)
+            l = tf.nn.relu(l)
             l = GlobalAvgPooling('gap', l)
             logits = FullyConnected('linear', l, out_dim=10, nl=tf.identity)
 
@@ -162,21 +162,21 @@ class Model(ModelDesc):
 def get_data(train_or_test):
     isTrain = train_or_test == 'train'
     ds = dataset.Cifar10(train_or_test)
-    # pp_mean = ds.get_per_pixel_mean()
-    # if isTrain:
-    #     augmentors = [
-    #         imgaug.CenterPaste((40, 40)),
-    #         imgaug.RandomCrop((32, 32)),
-    #         imgaug.Flip(horiz=True),
-    #         #imgaug.Brightness(20),
-    #         #imgaug.Contrast((0.6,1.4)),
-    #         imgaug.MapImage(lambda x: x - pp_mean),
-    #     ]
-    # else:
-    #     augmentors = [
-    #         imgaug.MapImage(lambda x: x - pp_mean)
-    #     ]
-    # ds = AugmentImageComponent(ds, augmentors)
+    pp_mean = ds.get_per_pixel_mean()
+    if isTrain:
+        augmentors = [
+            imgaug.CenterPaste((40, 40)),
+            imgaug.RandomCrop((32, 32)),
+            imgaug.Flip(horiz=True),
+            #imgaug.Brightness(20),
+            #imgaug.Contrast((0.6,1.4)),
+            imgaug.MapImage(lambda x: x - pp_mean),
+        ]
+    else:
+        augmentors = [
+            imgaug.MapImage(lambda x: x - pp_mean)
+        ]
+    ds = AugmentImageComponent(ds, augmentors)
     ds = BatchData(ds, BATCH_SIZE, remainder=not isTrain)
     if isTrain:
         ds = PrefetchData(ds, 3, 2)
