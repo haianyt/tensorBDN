@@ -128,7 +128,7 @@ class Model(ModelDesc):
                 for i in range(self.N):
                     l = add_layer('dense_layer.{}'.format(i), l)
             l = BatchNorm('bnlast', l)
-            l = tf.nn.activate(l)
+            l = activate(l)
             l = GlobalAvgPooling('gap', l)
             logits = FullyConnected('linear', l, out_dim=10, nl=tf.identity)
 
