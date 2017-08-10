@@ -23,7 +23,7 @@ On one TITAN X GPU (CUDA 7.5 and cudnn 5.1), the code should run ~5iters/s on a 
 """
 
 BITW = 1
-BITA = 2
+BITA = 1
 BITG = 32
 
 BATCH_SIZE = 64
@@ -128,7 +128,7 @@ class Model(ModelDesc):
                 for i in range(self.N):
                     l = add_layer('dense_layer.{}'.format(i), l)
             l = BatchNorm('bnlast', l)
-            l = tf.nn.relu(l)
+            l = tf.nn.activate(l)
             l = GlobalAvgPooling('gap', l)
             logits = FullyConnected('linear', l, out_dim=10, nl=tf.identity)
 
@@ -195,6 +195,7 @@ def get_config():
         dataflow=dataset_train,
         callbacks=[
             ModelSaver(),
+            MinSaver('val-error'),
             InferenceRunner(dataset_test,
                 [ScalarStats('cost'), ClassificationError()]),
             ScheduledHyperParamSetter('learning_rate',
