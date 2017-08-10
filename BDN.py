@@ -195,7 +195,7 @@ def get_config():
         dataflow=dataset_train,
         callbacks=[
             ModelSaver(),
-            MinSaver('val-error'),
+            MinSaver('val_error'),
             InferenceRunner(dataset_test,
                 [ScalarStats('cost'), ClassificationError()]),
             ScheduledHyperParamSetter('learning_rate',
